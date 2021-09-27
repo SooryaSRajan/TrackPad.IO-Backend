@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <script src="/static/socket.js"></script>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TrackPad IO</title>
+    <script>
+        const socket = io();
+    </script>
+    <style>
+        html {
+            width: 100vh;
+        }
+
+        body {
+            color: white;
+            font-family: 'Courier New', Courier, monospace;
+            margin: 0;
+            padding: 0;
+            width: 100vw;
+            height: 100vh;
+        }
+
+        .nav_root {
+            position: fixed;
+            background-color: rgb(65, 65, 65);
+            display: flex;
+            align-items: center;
+            justify-content: left;
+            width: 100vw;
+            height: 10%;
+            min-height: 30px;
+        }
+
+        .title_left {
+            margin-left: 40px;
+        }
+
+        .body_content {
+            height: 100%;
+            width: 100%;
+            background-color: grey;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .body_grid {
+            display: inline-block;
+        }
+
+        .block {
+            display: block;
+        }
+    </style>
+</head>
+
+<body onload="getIpAddress()">
+    <div class="nav_root">
+        <p class="title_left">
+            TrackPad IO
+        </p>
+    </div>
+    <div class="body_content">
+        <div class="body_grid">
+            <div class="block">
+                Connect to IP address: <span id='ip_address'></span>
+                <br>
+                Make sure both devices are connected to the same network.
+            </div>
+            <div class="block">
+            </div>
+
+        </div>
+    </div>
+
+    <script>
+        function getIpAddress(){
+            socket.emit('get_ip_address')
+        }
+        setInterval(function(){
+            getIpAddress()
+        }, 30000);
+        socket.on('ip_recv', (ip) => {
+            document.getElementById("ip_address").innerHTML = ip;
+        });
+    </script>
+</body>
+
+</html>
